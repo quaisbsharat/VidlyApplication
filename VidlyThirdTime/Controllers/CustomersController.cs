@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System.Data.Entity;
 using System.Linq;
 using System.Web.Mvc;
 using VidlyThirdTime.Models;
@@ -7,21 +7,29 @@ namespace VidlyThirdTime.Controllers
 {
     public class CustomersController : Controller
     {
-        readonly IEnumerable<Customer> _customers = new List<Customer>
+        private ApplicationDbContext _context;
+
+        public CustomersController()
         {
-            new Customer{Id=1,Name = "John Smith"},
-            new Customer{Id=2,Name = "Mary Williams"}
-        };
+            _context = new ApplicationDbContext();
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            _context.Dispose();
+        }
+
         // GET: Customers
         public ActionResult Index()
         {
-            return View(_customers);
+            var customers = _context.Customers.Include(m => m.MembershipType).ToList();
+            return View(customers);
         }
 
         public ActionResult Details(int id)
         {
 
-            var customer = _customers.SingleOrDefault(c => c.Id == id);
+            var customer = _context.Customers.Include(c => c.MembershipType).SingleOrDefault(c => c.Id == id);
             if (customer == null)
                 return HttpNotFound();
             return View(customer);

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Data.Entity;
+using System.Linq;
 using System.Web.Mvc;
 using VidlyThirdTime.Models;
 
@@ -6,20 +7,33 @@ namespace VidlyThirdTime.Controllers
 {
     public class MoviesController : Controller
     {
-        IEnumerable<Movie> GetMovies()
+        private ApplicationDbContext _context;
+
+        public MoviesController()
         {
-            return new List<Movie>()
-            {
-                new Movie{Name = "Shrek",Id= 1},
-                new Movie{Name = "Wall-e",Id= 2}
-            };
+            _context = new ApplicationDbContext();
         }
+
+        protected override void Dispose(bool disposing)
+        {
+            _context.Dispose();
+        }
+
         // GET: Movie
         [Route("Movies/")]
         [Route("Movies/index")]
         public ActionResult Random()
         {
-            return View(GetMovies());
+            var movies = _context.Movies.Include(m => m.Genre).ToList();
+            return View(movies);
+        }
+
+        public ActionResult Details(int Id)
+        {
+            var movie = _context.Movies.Include(m => m.Genre).SingleOrDefault(m => m.Id == Id);
+            if (movie == null)
+                return HttpNotFound();
+            return View(movie);
         }
     }
 }

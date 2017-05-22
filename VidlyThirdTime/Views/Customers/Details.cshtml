@@ -2,6 +2,14 @@
 @{
     ViewBag.Title = "Details";
 }
-
-<h2>@Model.Name</h2>
+<ul>
+    <li>
+        <h2>@Model.Name</h2>
+    </li>
+    <li>Membership Type: @Model.MembershipType.Name</li>
+    @if (Model.BirthDate.HasValue)
+    {
+        <li>Birthdate: @(Model.BirthDate.Value.ToShortDateString())</li>
+    }
+</ul>
 
