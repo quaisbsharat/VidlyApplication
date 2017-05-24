@@ -11,9 +11,12 @@ namespace VidlyThirdTime.Models
         public string Name { get; set; }
         public bool IsSubscribedToNewsLetter { get; set; }
 
+        [Display(Name = "Birth of Date")]
         public DateTime? BirthDate { get; set; }
+      
         //Navigation Property
         public MembershipType MembershipType { get; set; }
+        [Display(Name = "Membership Type")]
         public byte MembershipTypeId { get; set; }
     }
 }
