@@ -7,6 +7,7 @@ namespace VidlyThirdTime.Models
     {
         public int Id { get; set; }
 
+        [Required]
         public string Name { get; set; }
 
         [Display(Name = "Release Date")]
@@ -16,6 +17,7 @@ namespace VidlyThirdTime.Models
         public DateTime DateAdded { get; set; }
 
         [Required]
+        [Range(1, 20)]
         [Display(Name = "Number on Stock")]
         public int Stock { get; set; }
 
